@@ -3,17 +3,24 @@ platform linux -- Python 3.12.4, pytest-8.3.2, pluggy-1.5.0
 rootdir: /home/runner/work/Assessment-Backend-Week-2/Assessment-Backend-Week-2/marine_experiments
 collected 100 items
 
-test_api.py FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF.FF [ 60%]
-FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                 [100%]
+test_api.py ..............................FFFFFFFFFFFFF................. [ 60%]
+...............FFF............FF.......F                                 [100%]
 
-======================== 99 failed, 1 passed in 11.70s =========================
+======================== 19 failed, 81 passed in 13.22s ========================
 ************* Module api
+marine_experiments/api.py:8:0: C0301: Line too long (115/100) (line-too-long)
+marine_experiments/api.py:67:0: C0303: Trailing whitespace (trailing-whitespace)
+marine_experiments/api.py:93:0: C0305: Trailing newlines (trailing-newlines)
+marine_experiments/api.py:68:4: W0622: Redefining built-in 'type' (redefined-builtin)
 marine_experiments/api.py:3:0: W0611: Unused datetime imported from datetime (unused-import)
-marine_experiments/api.py:5:0: W0611: Unused request imported from flask (unused-import)
 marine_experiments/api.py:6:0: W0611: Unused sql imported from psycopg2 (unused-import)
+marine_experiments/api.py:6:0: W0611: Unused extras imported from psycopg2 (unused-import)
 ************* Module database_functions
-marine_experiments/database_functions.py:16:0: C0304: Final newline missing (missing-final-newline)
+marine_experiments/database_functions.py:140:0: C0301: Line too long (108/100) (line-too-long)
+marine_experiments/database_functions.py:160:0: C0325: Unnecessary parens after 'not' keyword (superfluous-parens)
+marine_experiments/database_functions.py:40:25: W0622: Redefining built-in 'type' (redefined-builtin)
+marine_experiments/database_functions.py:140:0: R0911: Too many return statements (7/6) (too-many-return-statements)
 
 ------------------------------------------------------------------
-Your code has been rated at 7.89/10 (previous run: 7.89/10, +0.00)
+Your code has been rated at 9.19/10 (previous run: 9.19/10, +0.00)
 
