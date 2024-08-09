@@ -3,9 +3,9 @@
 from datetime import datetime
 
 from flask import Flask, jsonify, request
-from psycopg2 import sql
+from psycopg2 import sql, extras
 
-from database_functions import get_db_connection
+from database_functions import get_db_connection, get_subjects
 
 
 app = Flask(__name__)
@@ -26,6 +26,11 @@ def home():
         "resource": "JSON-based API",
         "status": "Classified"
     })
+
+@app.route("/subject")
+def endpoint_get_subjects():
+    subjects = get_subjects(conn)
+    return jsonify(subjects), 200
 
 
 if __name__ == "__main__":
