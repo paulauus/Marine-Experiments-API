@@ -29,9 +29,13 @@ def get_subject(conn) -> list[dict]:
     cursor.close()
     return rows
 
-def get_experiment(conn) -> list[dict]:
+
+def get_experiment(conn, type: str = None, score_over: int = None) -> list[dict]:
     """Returns a list of experiments."""
     cursor = conn.cursor(cursor_factory=extras.RealDictCursor)
+
+    valid_types = {"intelligence", "obedience", "aggression"}
+
     base_query = """
     SELECT 
         e.experiment_id,
@@ -48,11 +52,46 @@ def get_experiment(conn) -> list[dict]:
         species s ON sub.species_id = s.species_id
     JOIN 
         experiment_type et ON e.experiment_type_id = et.experiment_type_id
-    ORDER BY 
-        e.experiment_date DESC;
     """
-    cursor.execute(base_query)
+    conditions = []
+    params = []
+
+    # Type
+    if type:
+        type = type.lower()
+        if type not in valid_types:
+            cursor.close()
+            return {"error": "Invalid value for 'type' parameter"}, 400
+        conditions.append("LOWER(et.type_name) = %s")
+        params.append(type)
+
+    # Score
+    if score_over:
+        if not isinstance(score_over, int) or not (0 <= score_over <= 100):
+            cursor.close()
+            return {"error": "Invalid value for 'score_over' parameter"}, 400
+        conditions.append(
+            "ROUND((e.score / et.max_score) * 100, 2) > %s")
+        params.append(score_over)
+
+    # Add conditions to the query
+    if conditions:
+        if len(conditions) == 2:
+            base_query += " WHERE " + " AND ".join(conditions)
+        base_query += " WHERE " + conditions[0]
+
+    # Add the ORDER BY clause
+    base_query += " ORDER BY e.experiment_date DESC;"
+
+    if params:
+        cursor.execute(base_query, params)
+    else:
+        cursor.execute(base_query)
     experiments = cursor.fetchall()
 
     cursor.close()
     return experiments
+
+
+def delete_experiment():
+    ...

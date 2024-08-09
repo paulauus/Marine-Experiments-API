@@ -33,12 +33,18 @@ def endpoint_get_subject():
     subjects = get_subject(conn)
     return jsonify(subjects), 200
 
-@app.route("/experiment", methods=["GET", "POST", "DELETE"])
+
+@app.route("/experiment", methods=["GET", "POST"])
 def endpoint_experiment():
     """Returns a list of experiments, also enabling POST and DELETE."""
-    experiments = get_experiment(conn)
-    return jsonify(experiments), 200
+    # Extracting query parameters
+    type = request.args.get('type', default=None, type=str)
+    score_over = request.args.get('score_over', default=None, type=int)
 
+    # Calling the get_experiment function
+    experiments = get_experiment(conn, type, score_over)
+
+    return jsonify(experiments), 200
 
 if __name__ == "__main__":
     app.config["DEBUG"] = True
@@ -47,3 +53,8 @@ if __name__ == "__main__":
     app.run(port=8000, debug=True)
 
     conn.close()
+
+@app.route("/experiment/<int:experiment_id>", methods=["DELETE"])
+def endpoint_delete_experiment(experiment_id):
+    """Deletes an experiment with the given id."""
+    
