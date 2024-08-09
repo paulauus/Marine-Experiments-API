@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import Flask, jsonify, request
 from psycopg2 import sql, extras
 
-from database_functions import get_db_connection, get_subjects
+from database_functions import get_db_connection, get_subject, get_experiment
 
 
 app = Flask(__name__)
@@ -28,9 +28,16 @@ def home():
     })
 
 @app.route("/subject")
-def endpoint_get_subjects():
-    subjects = get_subjects(conn)
+def endpoint_get_subject():
+    """Returns a list of dictionaries of subjects at /subject."""
+    subjects = get_subject(conn)
     return jsonify(subjects), 200
+
+@app.route("/experiment", methods=["GET", "POST", "DELETE"])
+def endpoint_experiment():
+    """Returns a list of experiments, also enabling POST and DELETE."""
+    experiments = get_experiment(conn)
+    return jsonify(experiments), 200
 
 
 if __name__ == "__main__":
