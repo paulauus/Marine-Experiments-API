@@ -146,26 +146,29 @@ def insert_experiment(conn, subject_id: int, experiment_type: str, score: int, e
         cursor.close()
         return {"error": "Invalid value for 'subject_id' parameter."}, 400
 
-    # Validate experiment_type
+    # Normalize experiment_type to lowercase
     valid_types = {"intelligence", "obedience", "aggression"}
-    if experiment_type not in valid_types:
+    if not isinstance(experiment_type, str):
         cursor.close()
         return {"error": "Invalid value for 'experiment_type' parameter."}, 400
     experiment_type = experiment_type.lower()
+    if experiment_type not in valid_types:
+        cursor.close()
+        return {"error": "Invalid value for 'experiment_type' parameter."}, 400
 
     # Validate score
     if not isinstance(score, int) or not (0 <= score <= 100):
         cursor.close()
-        return {"error": "Invalid value for 'score' parameter"}, 400
+        return {"error": "Invalid value for 'score' parameter."}, 400
 
     # Set the experiment date
     if experiment_date:
         try:
-            experiment_date = datetime.datetime.strptime(
-                experiment_date, "%Y-%m-%d").date()
+            experiment_date = datetime.strptime(
+                str(experiment_date), "%Y-%m-%d").date()
         except ValueError:
             cursor.close()
-            return {"error": "Invalid value for 'experiment_date' parameter"}, 400
+            return {"error": "Invalid value for 'experiment_date' parameter."}, 400
     else:
         experiment_date = datetime.date.today()
 
@@ -178,7 +181,7 @@ def insert_experiment(conn, subject_id: int, experiment_type: str, score: int, e
 
     if not experiment_type_id:
         cursor.close()
-        return {"error": "Invalid 'experiment_type' parameter"}, 400
+        return {"error": "Invalid 'experiment_type' parameter."}, 400
 
     experiment_type_id = experiment_type_id["experiment_type_id"]
 
