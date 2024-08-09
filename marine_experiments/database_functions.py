@@ -144,7 +144,7 @@ def insert_experiment(conn, subject_id: int, experiment_type: str, score: int, e
     # Validate subject_id
     if not isinstance(subject_id, int) or subject_id <= 0:
         cursor.close()
-        return {"error": "Invalid value for 'subject_id' parameter"}, 400
+        return {"error": "Invalid value for 'subject_id' parameter."}, 400
 
     # Validate experiment_type
     valid_types = {"intelligence", "obedience", "aggression"}
