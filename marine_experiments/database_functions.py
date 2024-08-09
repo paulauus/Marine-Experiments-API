@@ -1,6 +1,6 @@
 """Functions that interact with the database."""
 
-from datetime import datetime
+from datetime import datetime, date
 from psycopg2 import connect, extras
 from psycopg2.extras import RealDictCursor
 from psycopg2.extensions import connection
@@ -170,7 +170,7 @@ def insert_experiment(conn, subject_id: int, experiment_type: str, score: int, e
             cursor.close()
             return {"error": "Invalid value for 'experiment_date' parameter."}, 400
     else:
-        experiment_date = datetime.date.today()
+        experiment_date = date.today()
 
     # Get the experiment_type_id
     cursor.execute("""

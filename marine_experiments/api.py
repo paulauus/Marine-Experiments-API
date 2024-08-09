@@ -62,7 +62,7 @@ def endpoint_experiment():
             score,
             experiment_date
         )
-
+        conn.commit()
         return jsonify(response), status_code
     
     type = request.args.get('type')
